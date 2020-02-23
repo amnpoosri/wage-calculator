@@ -15,7 +15,7 @@ import WageListHeader from '../components/wage_list_header';
 import {calculateMonthlyWage} from '../utils/wage_utils';
 
 import {loadAndParseCSVFile} from '../utils/csv_utils';
-import Strings from '../constant/strings';
+import Strings from '../constants/strings';
 
 const MainScreen = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -23,7 +23,8 @@ const MainScreen = () => {
   useEffect(() => {
     loadAndParseCSVFile('HourList201403.csv').then(data => {
       if (data != null) {
-        setEmployees(data);
+        // Sort by id
+        setEmployees(data.sort((a, b) => (a.id > b.id ? 1 : -1)));
       }
     });
   }, []);
@@ -45,7 +46,7 @@ const MainScreen = () => {
                 monthlyWage={calculateMonthlyWage(item.shifts)}
               />
             )}
-            ListHeaderComponent={<WageListHeader title={'March'} />}
+            ListHeaderComponent={<WageListHeader title={Strings.march} />}
             stickyHeaderIndices={[0]}
           />
         </View>
@@ -56,6 +57,7 @@ const MainScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     width: '100%',
     backgroundColor: 'black',
   },
